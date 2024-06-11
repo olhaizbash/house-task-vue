@@ -1,0 +1,30 @@
+:root {
+  --element-primary: #eb5440;
+  --element-secondary: #4a4b4c;
+  --element-tertiary-light: #e8e8e8;
+  --element-tertiary-dark: #c3c3c3;
+  --element-background1: #f6f6f6;
+  --element-background2: #fff;
+  --text-primary: #000;
+  --text-secondary: #4a4b4c;
+  --text-hyperlink: #067bc2;
+}
+
+.container {
+  max-width: 320px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    max-width: 768px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  @media (min-width: 1280px) {
+    max-width: 1280px;
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+}
