@@ -38,14 +38,15 @@ form {
   width: 100%;
   position: relative;
 
-  @media (min-width: 330px) {
+  /* @media (min-width: 330px) {
     width: 320px;
-  }
+  } */
 }
 
 input {
   padding: 10px 40px;
-  max-width: 300px;
+  box-sizing: border-box;
+  width: 100%;
   background-color: var(--element-tertiary-light);
   border: none;
   outline: none;
@@ -57,6 +58,7 @@ input {
 
   @media (min-width: 768px) {
     font-size: 14px;
+    max-width: 300px;
   }
 }
 

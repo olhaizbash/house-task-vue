@@ -49,12 +49,15 @@ defineProps({
 @import './../assets/styles/main.css';
 
 button {
-  padding: 0;
   display: flex;
   gap: 10px;
   padding: 10px;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 330px) {
+    padding: 5px;
+  }
 
   @media (min-width: 768px) {
     border-radius: 8px;

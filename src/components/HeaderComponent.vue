@@ -57,33 +57,17 @@ const isAboutActive = computed(() => route.path === '/about')
 <style scoped>
 @import './../assets/styles/main.css';
 
-.container {
-  width: 100%;
-  padding-left: 0px;
-  padding-right: 0px;
-  margin: 0 auto;
-
-  @media (min-width: 768px) {
-    max-width: 768px;
-    padding-left: 32px;
-    padding-right: 32px;
-  }
-
-  @media (min-width: 1280px) {
-    max-width: 1280px;
-    padding-left: 100px;
-    padding-right: 100px;
-  }
-}
 header {
   position: fixed;
   width: 100%;
   background-color: var(--element-background2);
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   left: 0;
+  z-index: 50;
 
   @media screen and (max-width: 767px) {
     bottom: 0;
+    z-index: 50;
   }
 
   @media screen and (min-width: 768px) {

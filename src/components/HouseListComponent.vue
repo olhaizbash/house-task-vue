@@ -13,4 +13,10 @@ defineProps({
     <HouseItemComponent v-for="house in houses" :key="house.id" :house="house" />
   </ul>
 </template>
-<style scoped></style>
+<style scoped>
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+</style>

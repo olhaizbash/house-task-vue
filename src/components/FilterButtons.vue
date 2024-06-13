@@ -26,12 +26,8 @@ import ButtonComponent from './ButtonComponent.vue'
   align-items: center;
   width: 100%;
 
-  @media (min-width: 330px) {
-    width: 320px;
-  }
-
   @media (min-width: 768px) {
-    width: 250px;
+    max-width: 250px;
   }
 }
 </style>

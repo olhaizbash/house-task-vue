@@ -4,21 +4,18 @@ import FilterButtons from '../components/FilterButtons.vue'
 import SearchComponent from '../components/SearchComponent.vue'
 import HouseListComponent from '../components/HouseListComponent.vue'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { getHouses } from '@/api/api'
 
-const houses = [
-  {
-    house: 1,
-    id: 1
-  },
-  {
-    house: 1,
-    id: 2
-  },
-  {
-    house: 1,
-    id: 3
+const houses = ref([])
+
+onMounted(async () => {
+  try {
+    houses.value = await getHouses()
+  } catch (error) {
+    console.error('Error fetching API data:', error)
   }
-]
+})
+
 const query = ref('')
 
 const isDesktop = ref(window.innerWidth >= 768)
@@ -46,22 +43,24 @@ const buttonImgSrc = computed(() =>
   <main>
     <section class="houses">
       <div class="container">
-        <div class="houses-control-wrapper">
-          <div class="home">
-            <h1>Houses</h1>
-            <ButtonComponent
-              :bgColor="buttonColor"
-              :text="buttonText"
-              :imgSrc="buttonImgSrc"
-              :imgAlt="`Create house`"
-            />
+        <div class="house-overlay">
+          <div class="houses-control-wrapper">
+            <div class="home">
+              <h1>Houses</h1>
+              <ButtonComponent
+                :bgColor="buttonColor"
+                :text="buttonText"
+                :imgSrc="buttonImgSrc"
+                :imgAlt="`Create house`"
+              />
+            </div>
+            <div class="query-wrapper">
+              <SearchComponent type="text" v-model="query" placeholder="Search for a house" />
+              <FilterButtons />
+            </div>
           </div>
-          <div class="query-wrapper">
-            <SearchComponent type="text" v-model="query" placeholder="Search for a house" />
-            <FilterButtons />
-          </div>
+          <HouseListComponent :houses="houses" />
         </div>
-        <HouseListComponent :houses="houses" />
       </div>
     </section>
   </main>
@@ -115,5 +114,11 @@ h1 {
   @media screen and (min-width: 768px) {
     gap: 40px;
   }
+}
+
+.house-overlay {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 </style>
