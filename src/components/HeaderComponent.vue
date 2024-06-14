@@ -17,7 +17,8 @@ onUnmounted(() => {
 })
 
 const route = useRoute()
-const isHomeActive = computed(() => route.path === '/')
+// const isHomeActive = computed(() => route.path === '/')
+// const isCreateActive = computed(() => route.path === '/create')
 const isAboutActive = computed(() => route.path === '/about')
 </script>
 
@@ -32,9 +33,9 @@ const isAboutActive = computed(() => route.path === '/about')
         </nav>
       </div>
       <div v-else class="mobile-header">
-        <RouterLink to="/" class="icon" :class="{ active: isHomeActive }">
+        <RouterLink to="/" class="icon" :class="{ active: !isAboutActive }">
           <img
-            v-if="isHomeActive"
+            v-if="!isAboutActive"
             src="@/assets/img/ic_mobile_navigarion_home_active@3x.png"
             alt="Home"
           />

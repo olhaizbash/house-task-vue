@@ -5,6 +5,13 @@ import SearchComponent from '../components/SearchComponent.vue'
 import HouseListComponent from '../components/HouseListComponent.vue'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { getHouses } from '@/api/api'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goToCreate = () => {
+  router.push({ name: 'create listing' })
+}
 
 const houses = ref([])
 
@@ -48,10 +55,12 @@ const buttonImgSrc = computed(() =>
             <div class="home">
               <h1>Houses</h1>
               <ButtonComponent
+                class="create-btn"
                 :bgColor="buttonColor"
                 :text="buttonText"
                 :imgSrc="buttonImgSrc"
                 :imgAlt="`Create house`"
+                @click="goToCreate"
               />
             </div>
             <div class="query-wrapper">
@@ -69,8 +78,25 @@ const buttonImgSrc = computed(() =>
 <style>
 .home {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  position: relative;
+  height: 40px;
+
+  @media screen and (min-width: 768px) {
+    justify-content: space-between;
+    position: static;
+  }
+}
+
+.create-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  @media screen and (min-width: 768px) {
+    position: static;
+  }
 }
 
 .houses {
@@ -90,6 +116,10 @@ h1 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   text-align: center;
+
+  @media screen and (min-width: 768px) {
+    font-size: 32px;
+  }
 }
 
 .query-wrapper {

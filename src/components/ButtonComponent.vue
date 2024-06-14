@@ -5,10 +5,20 @@ defineProps({
     required: false,
     default: '8px'
   },
+  buttonType: {
+    type: String,
+    required: false,
+    default: 'button'
+  },
   textTransform: {
     type: String,
     required: false,
     default: 'uppercase'
+  },
+  textColor: {
+    type: String,
+    required: false,
+    default: 'var(--element-background2)'
   },
   width: {
     type: String,
@@ -39,9 +49,12 @@ defineProps({
 </script>
 
 <template>
-  <button :style="{ backgroundColor: bgColor, borderRadius: borderRadius, width: width }">
+  <button
+    :style="{ backgroundColor: bgColor, borderRadius: borderRadius, width: width }"
+    :type="buttonType"
+  >
     <img v-if="imgSrc" :src="imgSrc" :alt="imgAlt" />
-    <span v-if="text" :style="{ textTransform: textTransform }">{{ text }}</span>
+    <span v-if="text" :style="{ textTransform: textTransform, color: textColor }">{{ text }}</span>
   </button>
 </template>
 

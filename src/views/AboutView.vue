@@ -73,6 +73,10 @@ onUnmounted(() => {
   font-weight: 700;
   text-align: center;
   margin-bottom: 30px;
+
+  @media screen and (min-width: 768px) {
+    font-size: 32px;
+  }
 }
 
 .subtitle {
