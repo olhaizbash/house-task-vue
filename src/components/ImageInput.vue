@@ -30,7 +30,7 @@ import { ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
-    type: File,
+    type: [String, File],
     default: null
   }
 })

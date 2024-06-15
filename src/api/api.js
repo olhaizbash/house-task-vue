@@ -14,3 +14,19 @@ export const getHouses = async () => {
   console.log(response.data)
   return response.data
 }
+
+export const createHouse = async (data) => {
+  const response = await instance.post('', data)
+  console.log(response.data)
+  return response.data
+}
+
+export const uploadImageHouse = async (houseId, data) => {
+  const response = await instance.post(`${houseId}/upload`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  console.log(response.data)
+  return response.data
+}

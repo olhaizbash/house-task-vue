@@ -1,11 +1,4 @@
 <script setup>
-import { ref } from 'vue'
-const focus = ref(false)
-
-const handleFocus = (e) => {
-  focus.value = true
-}
-
 defineProps({
   label: {
     type: [String, Boolean],
@@ -21,9 +14,8 @@ defineProps({
     default: ''
   },
   error: {
-    type: String,
-    required: false,
-    default: 'Required fiels missing'
+    type: Boolean,
+    required: false
   }
 })
 </script>
@@ -32,14 +24,12 @@ defineProps({
   <div>
     <label v-if="label">{{ label }}</label>
     <input
+      :class="{ error: error }"
       :placeholder="placeholder"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
       v-bind="$attrs"
-      @blur="handleFocus"
-      focused="focus.toString()"
     />
-    <span>{{ error }}</span>
   </div>
 </template>
 
@@ -54,10 +44,7 @@ label {
     font-size: 14px;
   }
 }
-span {
-  color: var(--element-primary);
-  display: none;
-}
+
 div {
   display: flex;
   flex-direction: column;
@@ -77,17 +64,13 @@ input {
   font-weight: 400;
   color: var(--text-dark);
 
-  &:invalid[focused='true'] {
-    border: 1px solid var(--element-primary);
-  }
-
-  &:invalid[focused='true'] ~ span {
-    display: block;
-  }
-
   @media (min-width: 768px) {
     font-size: 14px;
   }
+}
+
+input.error {
+  border: 1px solid var(--element-primary);
 }
 
 input::placeholder {

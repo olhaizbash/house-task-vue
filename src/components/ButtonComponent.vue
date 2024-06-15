@@ -1,5 +1,7 @@
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   borderRadius: {
     type: String,
     required: false,
@@ -44,15 +46,34 @@ defineProps({
     type: String,
     required: false,
     default: 'Button'
+  },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
+})
+
+const buttonStyle = computed(() => {
+  if (props.disabled) {
+    return {
+      backgroundColor: 'rgba(238, 12, 12, 0.54)',
+      borderRadius: props.borderRadius,
+      width: props.width,
+      cursor: 'not-allowed'
+    }
+  } else {
+    return {
+      backgroundColor: props.bgColor,
+      borderRadius: props.borderRadius,
+      width: props.width
+    }
   }
 })
 </script>
 
 <template>
-  <button
-    :style="{ backgroundColor: bgColor, borderRadius: borderRadius, width: width }"
-    :type="buttonType"
-  >
+  <button :style="buttonStyle" :type="buttonType" :disabled="disabled">
     <img v-if="imgSrc" :src="imgSrc" :alt="imgAlt" />
     <span v-if="text" :style="{ textTransform: textTransform, color: textColor }">{{ text }}</span>
   </button>
@@ -91,5 +112,11 @@ span {
   font-size: 16px;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
+}
+
+button:disabled {
+  background-color: rgba(238, 12, 12, 0.54);
+  color: rgba(255, 255, 255, 0.533);
+  cursor: not-allowed;
 }
 </style>
