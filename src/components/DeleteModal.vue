@@ -10,7 +10,11 @@ defineProps({
     }
 })
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'confirmDelete']);
+
+const confirmDelete = () => {
+  emits('confirmDelete');
+};
 
 const closeModal = ()=>{
     emits('update:modelValue', false)
@@ -36,7 +40,11 @@ onUnmounted(()=>{
       <h1 class="delete-title">Delete listing</h1>
       <p class="delete-p">Are you sure you want to delete this listing? <br></br>This action can not be undone.</p>
 
-      <ButtonComponent :text="`Yes, delete`" :bgColor="`var(--element-primary)`" :width="`100%`" />
+      <ButtonComponent 
+      :text="`Yes, delete`" 
+      :bgColor="`var(--element-primary)`" 
+      :width="`100%`" 
+      @click="confirmDelete"/>
       <ButtonComponent 
       :text="`Go back`" 
       :bgColor="`var(--element-secondary)`" 

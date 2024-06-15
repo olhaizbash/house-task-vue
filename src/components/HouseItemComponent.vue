@@ -3,7 +3,11 @@ import ButtonComponent from './ButtonComponent.vue'
 import DeleteModal from './DeleteModal.vue'
 import { ref } from 'vue'
 
-defineProps({
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const props = defineProps({
   house: {
     type: Object,
     required: true
@@ -15,9 +19,24 @@ const isModalOpen = ref(false)
 const updateModalOpen = () => {
   isModalOpen.value = true
 }
+
+const updateModalClose = () => {
+  isModalOpen.value = false
+}
+
+const emit = defineEmits(['deleteHouse'])
+
+const confirmDelete = () => {
+  emit('deleteHouse', props.house.id)
+  updateModalClose()
+}
+
+const goToHouseInfo = (id) => {
+  router.push({ name: 'house information', params: { id } })
+}
 </script>
 <template>
-  <li class="house-item">
+  <li class="house-item" @click="goToHouseInfo(house.id)">
     <img class="house-image" :src="house.image" :alt="house.location.street" />
     <div class="house-info">
       <h2>{{ house.location.street }} {{ house.location?.houseNumber }}</h2>
@@ -52,7 +71,7 @@ const updateModalOpen = () => {
       />
     </div>
   </li>
-  <DeleteModal v-model="isModalOpen" v-if="isModalOpen" />
+  <DeleteModal v-model="isModalOpen" v-if="isModalOpen" @confirmDelete="confirmDelete" />
 </template>
 <style scoped>
 @import './../assets/styles/main.css';

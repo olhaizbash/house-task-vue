@@ -15,6 +15,10 @@ const goToCreate = () => {
 
 const houses = ref([])
 
+const removeHouse = (id) => {
+  houses.value = houses.value.filter((house) => house.id !== id)
+}
+
 onMounted(async () => {
   try {
     houses.value = await getHouses()
@@ -68,7 +72,7 @@ const buttonImgSrc = computed(() =>
               <FilterButtons />
             </div>
           </div>
-          <HouseListComponent :houses="houses" />
+          <HouseListComponent :houses="houses" @updateHouses="removeHouse" />
         </div>
       </div>
     </section>
@@ -101,7 +105,7 @@ const buttonImgSrc = computed(() =>
 
 .houses {
   padding-top: 50px;
-  padding-bottom: 50px;
+  padding-bottom: 70px;
   width: 100%;
 
   @media screen and (min-width: 768px) {

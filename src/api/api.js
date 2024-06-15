@@ -36,3 +36,9 @@ export const deleteHouse = async (houseId) => {
   console.log(response.data)
   return response.data
 }
+
+export const getHouseById = async (id) => {
+  const response = await instance.get(`/${id}`)
+  console.log(response.data)
+  return response.data
+}
