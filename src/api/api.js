@@ -30,3 +30,9 @@ export const uploadImageHouse = async (houseId, data) => {
   console.log(response.data)
   return response.data
 }
+
+export const deleteHouse = async (houseId) => {
+  const response = await instance.delete(`${houseId}`)
+  console.log(response.data)
+  return response.data
+}

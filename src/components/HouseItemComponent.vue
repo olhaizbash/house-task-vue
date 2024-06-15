@@ -1,5 +1,7 @@
 <script setup>
 import ButtonComponent from './ButtonComponent.vue'
+import DeleteModal from './DeleteModal.vue'
+import { ref } from 'vue'
 
 defineProps({
   house: {
@@ -7,6 +9,12 @@ defineProps({
     required: true
   }
 })
+
+const isModalOpen = ref(false)
+
+const updateModalOpen = () => {
+  isModalOpen.value = true
+}
 </script>
 <template>
   <li class="house-item">
@@ -40,9 +48,11 @@ defineProps({
         :imgSrc="`/src/assets/img/ic_delete@3x.png`"
         :imgAlt="`Delete house`"
         :bgColor="`transparent`"
+        @click="updateModalOpen"
       />
     </div>
   </li>
+  <DeleteModal v-model="isModalOpen" v-if="isModalOpen" />
 </template>
 <style scoped>
 @import './../assets/styles/main.css';
