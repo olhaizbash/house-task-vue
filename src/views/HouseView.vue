@@ -183,10 +183,29 @@ section {
   width: 100%;
   height: 100%;
   z-index: -1;
+  position: relative;
 
   @media screen and (min-width: 768px) {
     position: static;
     height: 100%;
+  }
+}
+
+.image-bg::after {
+  content: '';
+  width: 100%;
+  height: 40px;
+  border-radius: 40px 40px 0 0;
+  background-color: var(--element-background2);
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  z-index: 70;
+}
+
+@media screen and (min-width: 768px) {
+  .image-bg::after {
+    display: none;
   }
 }
 
@@ -201,7 +220,7 @@ section {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border-radius: 40px 40px 0 0;
+  /* border-radius: 40px 40px 0 0; */
   position: static;
 
   @media screen and (min-width: 768px) {
