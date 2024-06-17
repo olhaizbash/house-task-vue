@@ -1,5 +1,7 @@
 <script setup>
 import ButtonComponent from './ButtonComponent.vue'
+import { useStore } from 'vuex'
+const store = useStore()
 </script>
 <template>
   <div class="filter-wrapper">
@@ -9,6 +11,7 @@ import ButtonComponent from './ButtonComponent.vue'
       :borderRadius="`8px 0px 0px 8px`"
       :width="`50%`"
       :textTransform="`none`"
+      @click.stop="store.commit('PRICE_FILTER')"
     />
     <ButtonComponent
       :text="`Size`"
@@ -16,6 +19,7 @@ import ButtonComponent from './ButtonComponent.vue'
       :borderRadius="`0px 8px 8px 0px`"
       :width="`50%`"
       :textTransform="`none`"
+      @click.stop="store.commit('SIZE_FILTER')"
     />
   </div>
 </template>

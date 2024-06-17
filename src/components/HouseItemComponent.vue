@@ -11,6 +11,10 @@ const props = defineProps({
   house: {
     type: Object,
     required: true
+  },
+  recommend: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -61,7 +65,7 @@ const goToEditHouseInfo = (id) => {
         </li>
       </ul>
     </div>
-    <div class="house-btn">
+    <div v-if="!recommend" class="house-btn">
       <ButtonComponent
         :imgSrc="`/src/assets/img/ic_edit@3x.png`"
         :imgAlt="`Edit house`"

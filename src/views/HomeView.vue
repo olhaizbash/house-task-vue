@@ -4,8 +4,12 @@ import FilterButtons from '../components/FilterButtons.vue'
 import SearchComponent from '../components/SearchComponent.vue'
 import HouseListComponent from '../components/HouseListComponent.vue'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { getHouses } from '@/api/api'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import LoaderComponent from '@/components/LoaderComponent.vue'
+
+const store = useStore()
+const isLoading = computed(() => store.getters.isLoading)
 
 const router = useRouter()
 
@@ -13,18 +17,8 @@ const goToCreate = () => {
   router.push({ name: 'create listing' })
 }
 
-const houses = ref([])
-
-const removeHouse = (id) => {
-  houses.value = houses.value.filter((house) => house.id !== id)
-}
-
 onMounted(async () => {
-  try {
-    houses.value = await getHouses()
-  } catch (error) {
-    console.error('Error fetching API data:', error)
-  }
+  store.dispatch('fetchHouses')
 })
 
 const query = ref('')
@@ -72,7 +66,8 @@ const buttonImgSrc = computed(() =>
               <FilterButtons />
             </div>
           </div>
-          <HouseListComponent :houses="houses" @updateHouses="removeHouse" />
+          <LoaderComponent v-if="isLoading" />
+          <HouseListComponent v-if="!isLoading" />
         </div>
       </div>
     </section>

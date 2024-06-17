@@ -1,23 +1,13 @@
 <script setup>
 import HouseItemComponent from './HouseItemComponent.vue'
-import { deleteHouse } from '../api/api.js'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 
-defineProps({
-  houses: {
-    type: Array,
-    required: true
-  }
-})
-
-const emit = defineEmits(['updateHouses'])
+const store = useStore()
+const houses = computed(() => store.getters.getHousesFiltered)
 
 const deleteHouseById = async (id) => {
-  try {
-    await deleteHouse(id)
-    emit('updateHouses', id)
-  } catch (error) {
-    console.error('Error deleting house:', error)
-  }
+  store.dispatch('deleteHouse', id)
 }
 </script>
 <template>

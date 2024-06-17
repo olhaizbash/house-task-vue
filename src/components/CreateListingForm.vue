@@ -5,8 +5,8 @@ import ImageInput from './ImageInput.vue'
 import { reactive, computed, watchEffect } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import { createHouse, uploadImageHouse, editHouse } from '../api/api.js'
 import { useRouter } from 'vue-router'
+import { createHouse, uploadImageHouse, editHouse } from '../api/api.js'
 
 const router = useRouter()
 
@@ -39,20 +39,22 @@ const formData = reactive({
 })
 
 watchEffect(() => {
-  if (props.houseData && Object.keys(props.houseData).length > 0) {
-    formData.streetName = props.houseData?.location?.street || ''
-    formData.houseNumber = props.houseData?.location?.houseNumber || ''
-    formData.numberAddition = props.houseData?.location?.houseNumberAddition || ''
-    formData.zip = props.houseData?.location?.zip || ''
-    formData.city = props.houseData?.location?.city || ''
-    formData.image = props.houseData?.image || ''
-    formData.price = props.houseData?.price || ''
-    formData.constructionYear = props.houseData?.constructionYear || ''
-    formData.size = props.houseData?.size || ''
-    formData.hasGarage = props.houseData?.hasGarage || false
-    formData.bedrooms = props.houseData?.rooms?.bedrooms || ''
-    formData.bathrooms = props.houseData?.rooms?.bathrooms || ''
-    formData.description = props.houseData?.description || ''
+  if (props.isEdit) {
+    if (props.houseData && Object.keys(props.houseData).length > 0) {
+      formData.streetName = props.houseData?.location?.street || ''
+      formData.houseNumber = props.houseData?.location?.houseNumber || ''
+      formData.numberAddition = props.houseData?.location?.houseNumberAddition || ''
+      formData.zip = props.houseData?.location?.zip || ''
+      formData.city = props.houseData?.location?.city || ''
+      formData.image = props.houseData?.image || ''
+      formData.price = props.houseData?.price || ''
+      formData.constructionYear = props.houseData?.constructionYear || ''
+      formData.size = props.houseData?.size || ''
+      formData.hasGarage = props.houseData?.hasGarage || false
+      formData.bedrooms = props.houseData?.rooms?.bedrooms || ''
+      formData.bathrooms = props.houseData?.rooms?.bathrooms || ''
+      formData.description = props.houseData?.description || ''
+    }
   }
 })
 
@@ -112,10 +114,10 @@ const submitForm = async () => {
         })
         console.log(houseResponse)
         if (submittedData.image) {
-          // const formDataImage = new FormData()
-          // formDataImage.append('image', submittedData.image)
+          const formDataImage = new FormData()
+          formDataImage.append('image', submittedData.image)
 
-          const img = await uploadImageHouse(props.houseData.id, submittedData.image)
+          const img = await uploadImageHouse(props.houseData.id, formDataImage)
           console.log(img)
         }
       } catch (error) {

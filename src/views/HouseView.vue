@@ -1,21 +1,21 @@
 <script setup>
 import ButtonComponent from '@/components/ButtonComponent.vue'
+import ReccomendedComponent from '@/components/ReccomendedComponent.vue'
 import DeleteModal from '../components/DeleteModal.vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
-import { getHouseById, deleteHouse } from '@/api/api'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const houseById = computed(() => store.getters.getHouse)
+const isLoading = computed(() => store.getters.isLoading)
 
 const route = useRoute()
 const query = computed(() => route.params.id || '')
-const houseById = ref('')
 
-onMounted(async () => {
-  try {
-    houseById.value = await getHouseById(query.value)
-  } catch (error) {
-    console.error('Error fetching API data:', error)
-  }
+onMounted(() => {
+  store.dispatch('fetchHouseById', query.value)
 })
 
 const router = useRouter()
@@ -42,7 +42,7 @@ const confirmDelete = async () => {
   console.log(id)
   updateModalClose()
   try {
-    await deleteHouse(id)
+    store.dispatch('deleteHouse', id)
   } catch (error) {
     console.error('Error deleting house:', error)
   } finally {
@@ -90,68 +90,71 @@ const hasGarage = computed(() => (houseById.value[0].hasGarage ? 'Yes' : 'No'))
           :textTransform="`none`"
           @click="goToMain"
         />
-        <div class="overlay">
-          <div class="image-bg">
-            <img :src="houseById[0].image" alt="house image" />
-          </div>
-          <div class="house-info">
-            <h1 class="title">
-              {{ houseById[0].location.street }} {{ houseById[0].location.houseNumber }}
-            </h1>
-            <ul class="general-list">
-              <li class="general-item">
-                <img src="/src/assets/img/ic_location@3x.png" />
-                <p>{{ houseById[0].location.zip }} {{ houseById[0].location.city }}</p>
-              </li>
-              <li class="general-item">
-                <ul class="sub-list">
-                  <li class="general-item">
-                    <img src="/src/assets/img/ic_price@3x.png" />
-                    <p>{{ houseById[0].price }}</p>
-                  </li>
-                  <li class="general-item">
-                    <img src="/src/assets/img/ic_size@3x.png" />
-                    <p>{{ houseById[0].size }} m&sup2;</p>
-                  </li>
-                  <li class="general-item">
-                    <img src="/src/assets/img/ic_construction_date@3x.png" />
-                    <p>Built in {{ houseById[0].constructionYear }}</p>
-                  </li>
-                </ul>
-              </li>
-              <li class="general-item">
-                <ul class="sub-list">
-                  <li class="general-item">
-                    <img src="/src/assets/img/ic_bed@3x.png" />
-                    <p>{{ houseById[0].rooms.bedrooms }}</p>
-                  </li>
-                  <li class="general-item">
-                    <img src="/src/assets/img/ic_bath@3x.png" />
-                    <p>{{ houseById[0].rooms.bathrooms }}</p>
-                  </li>
-                  <li class="general-item">
-                    <img src="/src/assets/img/ic_garage@3x.png" />
-                    <p>{{ hasGarage }}</p>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <p>{{ houseById[0].description }}</p>
-            <div class="house-btn">
-              <ButtonComponent
-                :imgSrc="imgSrcEdit"
-                :imgAlt="`Edit house`"
-                :bgColor="`transparent`"
-                @click="goToEditHouseInfo(houseById[0].id)"
-              />
-              <ButtonComponent
-                :imgSrc="imgSrcDelete"
-                :imgAlt="`Delete house`"
-                :bgColor="`transparent`"
-                @click="updateModalOpen"
-              />
+        <div v-if="!isLoading" class="wrapper-flex">
+          <div class="overlay">
+            <div class="image-bg">
+              <img :src="houseById[0].image" alt="house image" />
+            </div>
+            <div class="house-info">
+              <h1 class="title">
+                {{ houseById[0].location.street }} {{ houseById[0].location.houseNumber }}
+              </h1>
+              <ul class="general-list">
+                <li class="general-item">
+                  <img src="/src/assets/img/ic_location@3x.png" />
+                  <p>{{ houseById[0].location.zip }} {{ houseById[0].location.city }}</p>
+                </li>
+                <li class="general-item">
+                  <ul class="sub-list">
+                    <li class="general-item">
+                      <img src="/src/assets/img/ic_price@3x.png" />
+                      <p>{{ houseById[0].price }}</p>
+                    </li>
+                    <li class="general-item">
+                      <img src="/src/assets/img/ic_size@3x.png" />
+                      <p>{{ houseById[0].size }} m&sup2;</p>
+                    </li>
+                    <li class="general-item">
+                      <img src="/src/assets/img/ic_construction_date@3x.png" />
+                      <p>Built in {{ houseById[0].constructionYear }}</p>
+                    </li>
+                  </ul>
+                </li>
+                <li class="general-item">
+                  <ul class="sub-list">
+                    <li class="general-item">
+                      <img src="/src/assets/img/ic_bed@3x.png" />
+                      <p>{{ houseById[0].rooms.bedrooms }}</p>
+                    </li>
+                    <li class="general-item">
+                      <img src="/src/assets/img/ic_bath@3x.png" />
+                      <p>{{ houseById[0].rooms.bathrooms }}</p>
+                    </li>
+                    <li class="general-item">
+                      <img src="/src/assets/img/ic_garage@3x.png" />
+                      <p>{{ hasGarage }}</p>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <p>{{ houseById[0].description }}</p>
+              <div class="house-btn">
+                <ButtonComponent
+                  :imgSrc="imgSrcEdit"
+                  :imgAlt="`Edit house`"
+                  :bgColor="`transparent`"
+                  @click="goToEditHouseInfo(houseById[0].id)"
+                />
+                <ButtonComponent
+                  :imgSrc="imgSrcDelete"
+                  :imgAlt="`Delete house`"
+                  :bgColor="`transparent`"
+                  @click="updateModalOpen"
+                />
+              </div>
             </div>
           </div>
+          <ReccomendedComponent />
         </div>
       </div>
     </div>
@@ -187,6 +190,16 @@ section {
     max-width: 1280px;
     padding-left: 100px;
     padding-right: 100px;
+  }
+}
+
+.wrapper-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
   }
 }
 .go-main-btn {

@@ -1,4 +1,6 @@
 <script setup>
+import { useStore } from 'vuex'
+
 defineProps({
   label: {
     type: [String, Boolean],
@@ -14,19 +16,35 @@ defineProps({
     default: ''
   }
 })
+
+const store = useStore()
+const emits = defineEmits(['update:modelValue'])
+
+const updateQuery = (e) => {
+  emits('update:modelValue', e.target.value)
+  store.commit('SET_FILTER', e.target.value)
+  // @input="$emit('update:modelValue', $event.target.value)"
+}
 </script>
 
 <template>
   <form>
     <label v-if="label">{{ label }}</label>
-    <button><img src="@/assets/img/ic_search@3x.png" /></button>
+    <button class="search-btn"><img src="@/assets/img/ic_search@3x.png" /></button>
     <input
       type="text"
       :placeholder="placeholder"
       :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
+      @input="updateQuery"
       v-bind="$attrs"
     />
+    <button
+      v-if="modelValue.length > 0"
+      class="delete-search-btn"
+      @click.stop="store.commit('RESET_FILTER')"
+    >
+      <img src="@/assets/img/ic_clear@3x.png" />
+    </button>
   </form>
 </template>
 
@@ -37,10 +55,6 @@ form {
   gap: 5px;
   width: 100%;
   position: relative;
-
-  /* @media (min-width: 330px) {
-    width: 320px;
-  } */
 }
 
 input {
@@ -78,10 +92,18 @@ img {
   height: 15px;
 }
 
-button {
+.search-btn {
   position: absolute;
   top: 1px;
   left: 10px;
+  z-index: 2;
+  background-color: transparent;
+}
+
+.delete-search-btn {
+  position: absolute;
+  top: 1px;
+  left: 260px;
   z-index: 2;
   background-color: transparent;
 }

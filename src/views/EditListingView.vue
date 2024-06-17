@@ -1,25 +1,23 @@
 <script setup>
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import CreateListingForm from '../components/CreateListingForm.vue'
+import LoaderComponent from '../components/LoaderComponent.vue'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
-import { getHouseById } from '@/api/api'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const houseById = computed(() => store.getters.getHouse || '')
+const isLoading = computed(() => store.getters.isLoading)
 
 const route = useRoute()
 const query = computed(() => route.params.id || '')
 const isEdit = computed(() => route.name === 'edit listing')
-const houseById = ref('')
 
-onMounted(async () => {
+onMounted(() => {
   if (isEdit.value) {
-    try {
-      console.log(route)
-      houseById.value = await getHouseById(query.value)
-      console.log(houseById.value[0])
-    } catch (error) {
-      console.error('Error fetching API data:', error)
-    }
+    store.dispatch('fetchHouseById', query.value)
   } else {
     return
   }
@@ -63,7 +61,12 @@ const buttonText = computed(() => isDesktop.value && 'Back to overview')
         />
         <h1 class="create-title">{{ isEdit ? `Edit listing` : `Creane new listing` }}</h1>
       </div>
-      <CreateListingForm :isEdit="isEdit" :houseData="houseById[0]" />
+
+      <LoaderComponent v-if="isLoading" />
+
+      <div v-if="!isLoading">
+        <CreateListingForm :isEdit="isEdit" :houseData="houseById[0]" />
+      </div>
     </div>
   </section>
 </template>
