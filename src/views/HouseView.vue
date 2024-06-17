@@ -1,8 +1,10 @@
 <script setup>
 import ButtonComponent from '@/components/ButtonComponent.vue'
+import DeleteModal from '../components/DeleteModal.vue'
 import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
-import { getHouseById } from '@/api/api'
+import { getHouseById, deleteHouse } from '@/api/api'
 
 const route = useRoute()
 const query = computed(() => route.params.id || '')
@@ -16,8 +18,36 @@ onMounted(async () => {
   }
 })
 
+const router = useRouter()
+
 const goToMain = () => {
-  route.push({ name: 'home' })
+  router.push({ name: 'home' })
+}
+
+const goToEditHouseInfo = (id) => {
+  router.push({ name: 'edit listing', params: { id } })
+}
+const isModalOpen = ref(false)
+
+const updateModalOpen = () => {
+  isModalOpen.value = true
+}
+
+const updateModalClose = () => {
+  isModalOpen.value = false
+}
+
+const confirmDelete = async () => {
+  const id = houseById.value[0].id
+  console.log(id)
+  updateModalClose()
+  try {
+    await deleteHouse(id)
+  } catch (error) {
+    console.error('Error deleting house:', error)
+  } finally {
+    goToMain()
+  }
 }
 
 const isDesktop = ref(window.innerWidth >= 768)
@@ -112,17 +142,20 @@ const hasGarage = computed(() => (houseById.value[0].hasGarage ? 'Yes' : 'No'))
                 :imgSrc="imgSrcEdit"
                 :imgAlt="`Edit house`"
                 :bgColor="`transparent`"
+                @click="goToEditHouseInfo(houseById[0].id)"
               />
               <ButtonComponent
                 :imgSrc="imgSrcDelete"
                 :imgAlt="`Delete house`"
                 :bgColor="`transparent`"
+                @click="updateModalOpen"
               />
             </div>
           </div>
         </div>
       </div>
     </div>
+    <DeleteModal v-model="isModalOpen" v-if="isModalOpen" @confirmDelete="confirmDelete" />
   </section>
 </template>
 <style scoped>

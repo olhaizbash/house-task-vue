@@ -42,3 +42,9 @@ export const getHouseById = async (id) => {
   console.log(response.data)
   return response.data
 }
+
+export const editHouse = async (houseId, data) => {
+  const response = await instance.post(`${houseId}`, data)
+  console.log(response.data)
+  return response.data
+}

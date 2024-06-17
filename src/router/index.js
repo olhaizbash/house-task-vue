@@ -22,7 +22,13 @@ const router = createRouter({
     {
       path: '/create',
       name: 'create listing',
-      component: () => import('../views/CreateListingView.vue')
+      component: () => import('../views/EditListingView.vue')
+    },
+    {
+      path: '/edit/:id',
+      name: 'edit listing',
+      component: () => import('../views/EditListingView.vue'),
+      props: true
     }
   ]
 })

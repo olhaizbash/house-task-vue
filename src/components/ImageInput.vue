@@ -26,21 +26,28 @@
 
 <script setup>
 import ButtonComponent from './ButtonComponent.vue'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 const props = defineProps({
   modelValue: {
     type: [String, File],
     default: null
+  },
+  edit: {
+    type: Boolean,
+    default: false
   }
 })
 
 const emit = defineEmits(['update:modelValue'])
 
 const fileInput = ref(null)
-const previewUrl = ref(null)
+const editImageProp = computed(() => (props.edit ? props.modelValue : null))
+
+const previewUrl = ref(editImageProp)
 
 const selectFile = () => {
+  console.log(props.modelValue)
   fileInput.value.click()
 }
 
@@ -58,6 +65,7 @@ const handleFileChange = (event) => {
 
 const removeFile = () => {
   emit('update:modelValue', null)
+
   previewUrl.value = null
   fileInput.value.value = ''
 }

@@ -34,6 +34,10 @@ const confirmDelete = () => {
 const goToHouseInfo = (id) => {
   router.push({ name: 'house information', params: { id } })
 }
+
+const goToEditHouseInfo = (id) => {
+  router.push({ name: 'edit listing', params: { id } })
+}
 </script>
 <template>
   <li class="house-item" @click="goToHouseInfo(house.id)">
@@ -62,12 +66,13 @@ const goToHouseInfo = (id) => {
         :imgSrc="`/src/assets/img/ic_edit@3x.png`"
         :imgAlt="`Edit house`"
         :bgColor="`transparent`"
+        @click.stop="goToEditHouseInfo(house.id)"
       />
       <ButtonComponent
         :imgSrc="`/src/assets/img/ic_delete@3x.png`"
         :imgAlt="`Delete house`"
         :bgColor="`transparent`"
-        @click="updateModalOpen"
+        @click.stop="updateModalOpen"
       />
     </div>
   </li>

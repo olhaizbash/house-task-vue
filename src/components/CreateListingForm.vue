@@ -2,10 +2,25 @@
 import ButtonComponent from './ButtonComponent.vue'
 import BaseInput from './BaseInput.vue'
 import ImageInput from './ImageInput.vue'
-import { reactive, computed } from 'vue'
+import { reactive, computed, watchEffect } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import { createHouse, uploadImageHouse } from '../api/api.js'
+import { createHouse, uploadImageHouse, editHouse } from '../api/api.js'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  houseData: {
+    type: [Object, Boolean],
+    default: () => ({})
+  }
+})
 
 const formData = reactive({
   streetName: '',
@@ -23,13 +38,31 @@ const formData = reactive({
   description: ''
 })
 
+watchEffect(() => {
+  if (props.houseData && Object.keys(props.houseData).length > 0) {
+    formData.streetName = props.houseData?.location?.street || ''
+    formData.houseNumber = props.houseData?.location?.houseNumber || ''
+    formData.numberAddition = props.houseData?.location?.houseNumberAddition || ''
+    formData.zip = props.houseData?.location?.zip || ''
+    formData.city = props.houseData?.location?.city || ''
+    formData.image = props.houseData?.image || ''
+    formData.price = props.houseData?.price || ''
+    formData.constructionYear = props.houseData?.constructionYear || ''
+    formData.size = props.houseData?.size || ''
+    formData.hasGarage = props.houseData?.hasGarage || false
+    formData.bedrooms = props.houseData?.rooms?.bedrooms || ''
+    formData.bathrooms = props.houseData?.rooms?.bathrooms || ''
+    formData.description = props.houseData?.description || ''
+  }
+})
+
 const rules = computed(() => {
   return {
     streetName: {
       required
     },
     houseNumber: { required },
-    numberAddition: { required },
+
     zip: { required },
     city: { required },
     image: { required },
@@ -52,43 +85,81 @@ const resetForm = () => {
   v$.value.$reset()
 }
 
+const goToHouseInfo = (id) => {
+  router.push({ name: 'house information', params: { id } })
+}
+
 const submitForm = async () => {
   const result = await v$.value.$validate()
   if (result) {
     const submittedData = { ...formData }
     console.log('Form submitted', submittedData)
-    try {
-      const houseResponse = await createHouse({
-        streetName: submittedData.streetName,
-        houseNumber: submittedData.houseNumber,
-        numberAddition: submittedData.numberAddition,
-        zip: submittedData.zip,
-        city: submittedData.city,
-        price: submittedData.price,
-        constructionYear: submittedData.constructionYear,
-        size: submittedData.size,
-        hasGarage: submittedData.hasGarage,
-        bedrooms: submittedData.bedrooms,
-        bathrooms: submittedData.bathrooms,
-        description: submittedData.description
-      })
-      const houseId = houseResponse.id
-      console.log(houseId)
+    if (props.isEdit) {
+      try {
+        const houseResponse = await editHouse(props.houseData.id, {
+          streetName: submittedData.streetName,
+          houseNumber: submittedData.houseNumber,
+          numberAddition: submittedData.numberAddition,
+          zip: submittedData.zip,
+          city: submittedData.city,
+          price: submittedData.price,
+          constructionYear: submittedData.constructionYear,
+          size: submittedData.size,
+          hasGarage: submittedData.hasGarage,
+          bedrooms: submittedData.bedrooms,
+          bathrooms: submittedData.bathrooms,
+          description: submittedData.description
+        })
+        console.log(houseResponse)
+        if (submittedData.image) {
+          // const formDataImage = new FormData()
+          // formDataImage.append('image', submittedData.image)
 
-      if (submittedData.image) {
-        const formDataImage = new FormData()
-        formDataImage.append('image', submittedData.image)
-
-        const img = await uploadImageHouse(houseId, formDataImage)
-        console.log(img)
+          const img = await uploadImageHouse(props.houseData.id, submittedData.image)
+          console.log(img)
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error)
+      } finally {
+        goToHouseInfo(props.houseData.id)
       }
+    } else {
+      try {
+        const houseResponse = await createHouse({
+          streetName: submittedData.streetName,
+          houseNumber: submittedData.houseNumber,
+          numberAddition: submittedData.numberAddition,
+          zip: submittedData.zip,
+          city: submittedData.city,
+          price: submittedData.price,
+          constructionYear: submittedData.constructionYear,
+          size: submittedData.size,
+          hasGarage: submittedData.hasGarage,
+          bedrooms: submittedData.bedrooms,
+          bathrooms: submittedData.bathrooms,
+          description: submittedData.description
+        })
+        const houseId = houseResponse.id
+        console.log(houseId)
 
-      resetForm()
-    } catch (error) {
-      console.error('Error submitting form:', error)
+        if (submittedData.image) {
+          const formDataImage = new FormData()
+          formDataImage.append('image', submittedData.image)
+
+          const img = await uploadImageHouse(houseId, formDataImage)
+          console.log(img)
+        }
+
+        resetForm()
+      } catch (error) {
+        console.error('Error submitting form:', error)
+      }
     }
   }
 }
+
+const buttonText = computed(() => (props.isEdit ? 'Save' : 'Post'))
+const labelStreet = computed(() => (props.isEdit ? 'Title of listing*' : 'Street name*'))
 </script>
 
 <template>
@@ -97,7 +168,7 @@ const submitForm = async () => {
       type="text"
       v-model="formData.streetName"
       placeholder="Enter the street name"
-      :label="`Street name*`"
+      :label="labelStreet"
       @blur="v$.streetName.$touch"
       :error="v$.streetName.$error"
     />
@@ -119,11 +190,9 @@ const submitForm = async () => {
           type="text"
           v-model="formData.numberAddition"
           placeholder="e.g. A"
-          :label="`Additional (optional)*`"
-          @blur="v$.numberAddition.$touch"
-          :error="v$.numberAddition.$error"
+          :label="`Additional (optional)`"
         />
-        <span class="error" v-if="v$.numberAddition.$error">Required field missing.</span>
+        <!-- <span class="error" v-if="v$.numberAddition.$error">Required field missing.</span> -->
       </div>
     </div>
     <BaseInput
@@ -144,7 +213,7 @@ const submitForm = async () => {
       :error="v$.city.$error"
     />
     <span class="error" v-if="v$.city.$error">Required field missing.</span>
-    <ImageInput v-model="formData.image" />
+    <ImageInput v-model="formData.image" :edit="isEdit" />
     <BaseInput
       type="number"
       v-model="formData.price"
@@ -229,7 +298,7 @@ const submitForm = async () => {
     <ButtonComponent
       :disabled="v$.$invalid"
       :buttonType="`submit`"
-      :text="`Post`"
+      :text="buttonText"
       :bgColor="`var(--element-primary)`"
       class="submit-btn"
     />
