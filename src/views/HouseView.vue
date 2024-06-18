@@ -39,7 +39,6 @@ const updateModalClose = () => {
 
 const confirmDelete = async () => {
   const id = houseById.value[0].id
-  console.log(id)
   updateModalClose()
   try {
     store.dispatch('deleteHouse', id)

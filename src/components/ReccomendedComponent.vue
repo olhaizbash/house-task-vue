@@ -10,7 +10,7 @@ const visibleHouses = ref(houses.value.slice(0, 3))
 <template>
   <div class="wrapper-recomended">
     <h2>Recommended for you</h2>
-    <ul class="recommend">
+    <ul v-if="visibleHouses.length > 0" class="recommend">
       <HouseItemComponent
         v-for="house in visibleHouses"
         :key="house.id"
@@ -18,6 +18,10 @@ const visibleHouses = ref(houses.value.slice(0, 3))
         :recommend="true"
       />
     </ul>
+    <div v-if="visibleHouses.length === 0" class="flex-img">
+    <img src="/src/assets/img/img_empty_houses@3x.png" alt="Houses not found" />
+    <p>Something went wrong... <br></br>We will quickly fix the bugs and get back to you.</p>
+  </div>
   </div>
 </template>
 <style scoped>
@@ -46,5 +50,32 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.flex-img {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: center;
+}
+
+p {
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+
+  @media (min-width: 768px) {
+    font-size: 14px;
+  }
+}
+img{
+  width: 100%;
+  margin: auto;
+
+  @media (min-width: 768px) {
+    width: 150px;
+  }
 }
 </style>

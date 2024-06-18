@@ -11,13 +11,11 @@ const instance = axios.create({
 
 export const getHouses = async () => {
   const response = await instance.get('')
-  console.log(response.data)
   return response.data
 }
 
 export const createHouse = async (data) => {
   const response = await instance.post('', data)
-  console.log(response.data)
   return response.data
 }
 
@@ -27,24 +25,20 @@ export const uploadImageHouse = async (houseId, data) => {
       'Content-Type': 'multipart/form-data'
     }
   })
-  console.log(response.data)
   return response.data
 }
 
 export const deleteHouse = async (houseId) => {
   const response = await instance.delete(`${houseId}`)
-  console.log(response.data)
   return response.data
 }
 
 export const getHouseById = async (id) => {
   const response = await instance.get(`/${id}`)
-  console.log(response.data)
   return response.data
 }
 
 export const editHouse = async (houseId, data) => {
   const response = await instance.post(`${houseId}`, data)
-  console.log(response.data)
   return response.data
 }

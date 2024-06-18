@@ -23,7 +23,11 @@ const emits = defineEmits(['update:modelValue'])
 const updateQuery = (e) => {
   emits('update:modelValue', e.target.value)
   store.commit('SET_FILTER', e.target.value)
-  // @input="$emit('update:modelValue', $event.target.value)"
+}
+
+const resetQuery = (e) => {
+  emits('update:modelValue', '')
+  store.commit('SET_FILTER', '')
 }
 </script>
 
@@ -38,11 +42,7 @@ const updateQuery = (e) => {
       @input="updateQuery"
       v-bind="$attrs"
     />
-    <button
-      v-if="modelValue.length > 0"
-      class="delete-search-btn"
-      @click.stop="store.commit('RESET_FILTER')"
-    >
+    <button v-if="modelValue.length > 0" class="delete-search-btn" @click="resetQuery">
       <img src="@/assets/img/ic_clear@3x.png" />
     </button>
   </form>
@@ -55,6 +55,10 @@ form {
   gap: 5px;
   width: 100%;
   position: relative;
+
+  @media (min-width: 768px) {
+    width: 300px;
+  }
 }
 
 input {
@@ -103,7 +107,7 @@ img {
 .delete-search-btn {
   position: absolute;
   top: 1px;
-  left: 260px;
+  right: 10px;
   z-index: 2;
   background-color: transparent;
 }

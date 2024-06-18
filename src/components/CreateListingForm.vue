@@ -112,13 +112,13 @@ const submitForm = async () => {
           bathrooms: submittedData.bathrooms,
           description: submittedData.description
         })
-        console.log(houseResponse)
+        console.log('Sometimes it takes long time to post info before image can post')
         if (submittedData.image) {
           const formDataImage = new FormData()
           formDataImage.append('image', submittedData.image)
 
-          const img = await uploadImageHouse(props.houseData.id, formDataImage)
-          console.log(img)
+          await uploadImageHouse(props.houseData.id, formDataImage)
+          console.log('Image uploaded')
         }
       } catch (error) {
         console.error('Error submitting form:', error)
@@ -142,14 +142,14 @@ const submitForm = async () => {
           description: submittedData.description
         })
         const houseId = houseResponse.id
-        console.log(houseId)
+        console.log('Sometimes it takes long time to post info before image can post')
 
         if (submittedData.image) {
           const formDataImage = new FormData()
           formDataImage.append('image', submittedData.image)
 
-          const img = await uploadImageHouse(houseId, formDataImage)
-          console.log(img)
+          await uploadImageHouse(houseId, formDataImage)
+          console.log('Image uploaded')
         }
 
         resetForm()

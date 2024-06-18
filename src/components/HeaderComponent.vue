@@ -17,8 +17,6 @@ onUnmounted(() => {
 })
 
 const route = useRoute()
-// const isHomeActive = computed(() => route.path === '/')
-// const isCreateActive = computed(() => route.path === '/create')
 const isAboutActive = computed(() => route.path === '/about')
 </script>
 
