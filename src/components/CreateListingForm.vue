@@ -4,7 +4,7 @@ import BaseInput from './BaseInput.vue'
 import ImageInput from './ImageInput.vue'
 import { reactive, computed, watchEffect } from 'vue'
 import useVuelidate from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, minValue, helpers } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
 import { createHouse, uploadImageHouse, editHouse } from '../api/api.js'
 
@@ -69,7 +69,10 @@ const rules = computed(() => {
     city: { required },
     image: { required },
     price: { required },
-    constructionYear: { required },
+    constructionYear: {
+      required: helpers.withMessage(`Required field missing.`, required),
+      minValue: helpers.withMessage(`Year must be 1901 or later.`, minValue(1901))
+    },
     size: { required },
     hasGarage: { required },
     bedrooms: { required },
@@ -165,7 +168,7 @@ const labelStreet = computed(() => (props.isEdit ? 'Title of listing*' : 'Street
 </script>
 
 <template>
-  <form @submit.prevent="submitForm">
+  <form class="form" @submit.prevent="submitForm">
     <BaseInput
       type="text"
       v-model="formData.streetName"
@@ -238,9 +241,10 @@ const labelStreet = computed(() => (props.isEdit ? 'Title of listing*' : 'Street
         <span class="error" v-if="v$.size.$error">Required field missing.</span>
       </div>
       <div class="error-display">
-        <div class="select">
+        <div class="select-wrapper">
           <span class="custom-label">Garage*</span>
           <select
+            class="select"
             v-model="formData.hasGarage"
             @blur="v$.hasGarage.$touch"
             :class="{ 'input-error': v$.hasGarage.$error }"
@@ -286,10 +290,13 @@ const labelStreet = computed(() => (props.isEdit ? 'Title of listing*' : 'Street
       @blur="v$.constructionYear.$touch"
       :error="v$.constructionYear.$error"
     />
-    <span class="error" v-if="v$.constructionYear.$error">Required field missing.</span>
+    <span class="error" v-if="v$.constructionYear.$error">{{
+      v$.constructionYear.$errors[0].$message
+    }}</span>
     <div>
       <span class="custom-label">Description*</span>
       <textarea
+        class="textarea"
         v-model="formData.description"
         placeholder="Enter descrintion"
         @blur="v$.description.$touch"
@@ -309,7 +316,7 @@ const labelStreet = computed(() => (props.isEdit ? 'Title of listing*' : 'Street
 <style scoped>
 @import './../assets/styles/main.css';
 
-form {
+.form {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -318,10 +325,10 @@ form {
     width: 400px;
   }
 }
-.select {
+.select-wrapper {
   width: 100%;
 }
-select {
+.select {
   padding: 10px 10px;
   box-sizing: border-box;
   width: 100%;
@@ -338,7 +345,7 @@ select {
     font-size: 14px;
   }
 }
-select:invalid {
+.select:invalid {
   font-size: 12px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
@@ -349,7 +356,7 @@ select:invalid {
   }
 }
 
-textarea {
+.textarea {
   padding: 10px 10px;
   box-sizing: border-box;
   width: 100%;

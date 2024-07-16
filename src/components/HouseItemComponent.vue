@@ -47,32 +47,34 @@ const goToEditHouseInfo = (id) => {
   <li class="house-item" @click="goToHouseInfo(house.id)">
     <img class="house-image" :src="house.image" :alt="house.location.street" />
     <div class="house-info">
-      <h2>{{ house.location.street }} {{ house.location?.houseNumber }}</h2>
+      <h2 class="sub-title">{{ house.location.street }} {{ house.location?.houseNumber }}</h2>
       <p class="price">&#8364; {{ house.price }}</p>
-      <p>{{ house.location.zip }} {{ house.location.city }}</p>
+      <p class="house-metrics-info">{{ house.location.zip }} {{ house.location.city }}</p>
       <ul class="additional-info">
         <li>
-          <img src="@/assets/img/ic_bed@3x.png" alt="bedrooms amount" />
-          <p>{{ house.rooms.bedrooms }}</p>
+          <img class="icons" src="@/assets/img/ic_bed@3x.png" alt="bedrooms amount" />
+          <p class="house-metrics-info">{{ house.rooms.bedrooms }}</p>
         </li>
         <li>
-          <img src="@/assets/img/ic_bath@3x.png" alt="bathrooms amount" />
-          <p>{{ house.rooms.bathrooms }}</p>
+          <img class="icons" src="@/assets/img/ic_bath@3x.png" alt="bathrooms amount" />
+          <p class="house-metrics-info">{{ house.rooms.bathrooms }}</p>
         </li>
         <li>
-          <img src="@/assets/img/ic_size@3x.png" alt="size of the house" />
-          <p>{{ house.size }} m&sup2;</p>
+          <img class="icons" src="@/assets/img/ic_size@3x.png" alt="size of the house" />
+          <p class="house-metrics-info">{{ house.size }} m&sup2;</p>
         </li>
       </ul>
     </div>
     <div v-if="!recommend" class="house-btn">
       <ButtonComponent
+        v-if="house.madeByMe"
         :imgSrc="`/src/assets/img/ic_edit@3x.png`"
         :imgAlt="`Edit house`"
         :bgColor="`transparent`"
         @click.stop="goToEditHouseInfo(house.id)"
       />
       <ButtonComponent
+        v-if="house.madeByMe"
         :imgSrc="`/src/assets/img/ic_delete@3x.png`"
         :imgAlt="`Delete house`"
         :bgColor="`transparent`"
@@ -84,6 +86,14 @@ const goToEditHouseInfo = (id) => {
 </template>
 <style scoped>
 @import './../assets/styles/main.css';
+
+.icons {
+  width: 20px;
+
+  @media (min-width: 768px) {
+    width: 15px;
+  }
+}
 
 .house-image {
   display: block;
@@ -152,7 +162,7 @@ const goToEditHouseInfo = (id) => {
   }
 }
 
-h2 {
+.sub-title {
   color: var(--text-primary);
   font-size: 14px;
   font-family: 'Montserrat', sans-serif;
@@ -163,7 +173,7 @@ h2 {
   }
 }
 
-p {
+.house-metrics-info {
   font-size: 12px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
@@ -174,8 +184,14 @@ p {
   }
 }
 
-p.price {
+.price {
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 600;
   color: var(--text-primary);
+
+  @media (min-width: 768px) {
+    font-size: 14px;
+  }
 }
 </style>

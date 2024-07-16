@@ -21,13 +21,17 @@ const isAboutActive = computed(() => route.path === '/about')
 </script>
 
 <template>
-  <header :class="{ desktop: isDesktop, mobile: !isDesktop }">
+  <header class="header" :class="{ desktop: isDesktop, mobile: !isDesktop }">
     <div class="container">
       <div v-if="isDesktop" class="desktop-header">
         <img src="@/assets/img/img_logo_dtt@3x.png" alt="Logo" class="logo" />
         <nav>
-          <RouterLink to="/" class="nav-link">Houses</RouterLink>
-          <RouterLink to="/about" class="nav-link">About</RouterLink>
+          <RouterLink to="/" class="nav-link" :class="{ active: !isAboutActive }"
+            >Houses</RouterLink
+          >
+          <RouterLink to="/about" class="nav-link" :class="{ active: isAboutActive }"
+            >About</RouterLink
+          >
         </nav>
       </div>
       <div v-else class="mobile-header">
@@ -56,7 +60,7 @@ const isAboutActive = computed(() => route.path === '/about')
 <style scoped>
 @import './../assets/styles/main.css';
 
-header {
+.header {
   position: fixed;
   width: 100%;
   background-color: var(--element-background2);
@@ -101,6 +105,11 @@ header {
 }
 
 .nav-link.router-link-active {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.nav-link.active {
   color: var(--text-primary);
   font-weight: 700;
 }

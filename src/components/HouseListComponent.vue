@@ -8,6 +8,7 @@ const houses = computed(() => store.getters.getHousesFiltered)
 
 const deleteHouseById = async (id) => {
   store.dispatch('deleteHouse', id)
+  store.dispatch('fetchHouses')
 }
 </script>
 <template>
@@ -20,8 +21,8 @@ const deleteHouseById = async (id) => {
     />
   </ul>
   <div v-if="houses.length === 0" class="flex-img">
-    <img src="/src/assets/img/img_empty_houses@3x.png" alt="Houses not found" />
-    <p>No results found. <br></br> Prease try another keyword.</p>
+    <img class="error-img" src="/src/assets/img/img_empty_houses@3x.png" alt="Houses not found" />
+    <p class="error-message">No results found. <br></br> Prease try another keyword.</p>
   </div>
 </template>
 <style scoped>
@@ -38,7 +39,7 @@ const deleteHouseById = async (id) => {
 align-self: center;
 }
 
-p {
+.error-message {
   font-size: 12px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 600;
@@ -49,7 +50,7 @@ p {
     font-size: 14px;
   }
 }
-img{
+.error-img{
   width: 300px;
   margin-top: 50px;
   @media (max-width: 350px) {

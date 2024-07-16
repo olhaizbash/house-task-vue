@@ -21,9 +21,10 @@ defineProps({
 </script>
 
 <template>
-  <div>
-    <label v-if="label">{{ label }}</label>
+  <div class="input-wrapper">
+    <label class="input-label" v-if="label">{{ label }}</label>
     <input
+      class="input"
       :class="{ error: error }"
       :placeholder="placeholder"
       :value="modelValue"
@@ -34,7 +35,7 @@ defineProps({
 </template>
 
 <style scoped>
-label {
+.input-label {
   color: var(--text-secondary);
   font-size: 12px;
   font-family: 'Montserrat', sans-serif;
@@ -45,13 +46,13 @@ label {
   }
 }
 
-div {
+.input-wrapper {
   display: flex;
   flex-direction: column;
   gap: 5px;
   width: 100%;
 }
-input {
+.input {
   padding: 10px 10px;
   box-sizing: border-box;
   width: 100%;
@@ -69,11 +70,11 @@ input {
   }
 }
 
-input.error {
+.input.error {
   border: 1px solid var(--element-primary);
 }
 
-input::placeholder {
+.input::placeholder {
   font-size: 12px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;

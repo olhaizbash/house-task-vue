@@ -76,7 +76,7 @@ const imgSrcDelete = computed(() =>
 const hasGarage = computed(() => (houseById.value[0].hasGarage ? 'Yes' : 'No'))
 </script>
 <template>
-  <section v-if="houseById">
+  <section class="house-section" v-if="houseById">
     <div class="container-house">
       <div class="wrapper">
         <ButtonComponent
@@ -100,44 +100,46 @@ const hasGarage = computed(() => (houseById.value[0].hasGarage ? 'Yes' : 'No'))
               </h1>
               <ul class="general-list">
                 <li class="general-item">
-                  <img src="/src/assets/img/ic_location@3x.png" />
-                  <p>{{ houseById[0].location.zip }} {{ houseById[0].location.city }}</p>
+                  <img class="icons" src="/src/assets/img/ic_location@3x.png" />
+                  <p class="house-metrics-info">
+                    {{ houseById[0].location.zip }} {{ houseById[0].location.city }}
+                  </p>
                 </li>
                 <li class="general-item">
                   <ul class="sub-list">
                     <li class="general-item">
-                      <img src="/src/assets/img/ic_price@3x.png" />
-                      <p>{{ houseById[0].price }}</p>
+                      <img class="icons" src="/src/assets/img/ic_price@3x.png" />
+                      <p class="house-metrics-info">{{ houseById[0].price }}</p>
                     </li>
                     <li class="general-item">
-                      <img src="/src/assets/img/ic_size@3x.png" />
-                      <p>{{ houseById[0].size }} m&sup2;</p>
+                      <img class="icons" src="/src/assets/img/ic_size@3x.png" />
+                      <p class="house-metrics-info">{{ houseById[0].size }} m&sup2;</p>
                     </li>
                     <li class="general-item">
-                      <img src="/src/assets/img/ic_construction_date@3x.png" />
-                      <p>Built in {{ houseById[0].constructionYear }}</p>
+                      <img class="icons" src="/src/assets/img/ic_construction_date@3x.png" />
+                      <p class="house-metrics-info">Built in {{ houseById[0].constructionYear }}</p>
                     </li>
                   </ul>
                 </li>
                 <li class="general-item">
                   <ul class="sub-list">
                     <li class="general-item">
-                      <img src="/src/assets/img/ic_bed@3x.png" />
-                      <p>{{ houseById[0].rooms.bedrooms }}</p>
+                      <img class="icons" src="/src/assets/img/ic_bed@3x.png" />
+                      <p class="house-metrics-info">{{ houseById[0].rooms.bedrooms }}</p>
                     </li>
                     <li class="general-item">
-                      <img src="/src/assets/img/ic_bath@3x.png" />
-                      <p>{{ houseById[0].rooms.bathrooms }}</p>
+                      <img class="icons" src="/src/assets/img/ic_bath@3x.png" />
+                      <p class="house-metrics-info">{{ houseById[0].rooms.bathrooms }}</p>
                     </li>
                     <li class="general-item">
-                      <img src="/src/assets/img/ic_garage@3x.png" />
-                      <p>{{ hasGarage }}</p>
+                      <img class="icons" src="/src/assets/img/ic_garage@3x.png" />
+                      <p class="house-metrics-info">{{ hasGarage }}</p>
                     </li>
                   </ul>
                 </li>
               </ul>
-              <p>{{ houseById[0].description }}</p>
-              <div class="house-btn">
+              <p class="house-metrics-info">{{ houseById[0].description }}</p>
+              <div v-if="houseById[0].madeByMe" class="house-btn">
                 <ButtonComponent
                   :imgSrc="imgSrcEdit"
                   :imgAlt="`Edit house`"
@@ -162,7 +164,7 @@ const hasGarage = computed(() => (houseById.value[0].hasGarage ? 'Yes' : 'No'))
 </template>
 <style scoped>
 @import './../assets/styles/main.css';
-section {
+.house-section {
   padding-bottom: 70px;
   width: 100%;
 
@@ -303,7 +305,7 @@ section {
   }
 }
 
-p {
+.house-metrics-info {
   font-size: 12px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
@@ -328,6 +330,14 @@ p {
     position: absolute;
     top: 20px;
     right: 20px;
+  }
+}
+
+.icons {
+  width: 20px;
+
+  @media (min-width: 768px) {
+    width: 15px;
   }
 }
 </style>

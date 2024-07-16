@@ -73,16 +73,21 @@ const buttonStyle = computed(() => {
 </script>
 
 <template>
-  <button :style="buttonStyle" :type="buttonType" :disabled="disabled">
-    <img v-if="imgSrc" :src="imgSrc" :alt="imgAlt" />
-    <span v-if="text" :style="{ textTransform: textTransform, color: textColor }">{{ text }}</span>
+  <button class="button" :style="buttonStyle" :type="buttonType" :disabled="disabled">
+    <img class="btn-image" v-if="imgSrc" :src="imgSrc" :alt="imgAlt" />
+    <span
+      class="btn-span"
+      v-if="text"
+      :style="{ textTransform: textTransform, color: textColor }"
+      >{{ text }}</span
+    >
   </button>
 </template>
 
-<style setup>
+<style scoped>
 @import './../assets/styles/main.css';
 
-button {
+.button {
   display: flex;
   gap: 10px;
   padding: 10px;
@@ -99,7 +104,7 @@ button {
   }
 }
 
-img {
+.btn-image {
   width: 20px;
 
   @media (min-width: 768px) {
@@ -107,14 +112,14 @@ img {
   }
 }
 
-span {
+.btn-span {
   color: var(--element-background2);
   font-size: 16px;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
 }
 
-button:disabled {
+.button:disabled {
   background-color: rgba(238, 12, 12, 0.54);
   color: rgba(255, 255, 255, 0.533);
   cursor: not-allowed;

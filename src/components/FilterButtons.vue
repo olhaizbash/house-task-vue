@@ -1,25 +1,34 @@
 <script setup>
 import ButtonComponent from './ButtonComponent.vue'
 import { useStore } from 'vuex'
+import { computed } from 'vue'
 const store = useStore()
+
+const activeFilter = computed(() => store.state.activeFilter)
+
+const setFilter = (filter) => {
+  store.commit(filter === 'price' ? 'PRICE_FILTER' : 'SIZE_FILTER')
+}
 </script>
 <template>
   <div class="filter-wrapper">
     <ButtonComponent
       :text="`Price`"
-      :bgColor="`var(--element-primary)`"
+      :bgColor="
+        activeFilter === 'price' ? `var(--element-primary)` : `var(--element-tertiary-dark)`
+      "
       :borderRadius="`8px 0px 0px 8px`"
       :width="`50%`"
       :textTransform="`none`"
-      @click.stop="store.commit('PRICE_FILTER')"
+      @click.stop="setFilter('price')"
     />
     <ButtonComponent
       :text="`Size`"
-      :bgColor="`var(--element-tertiary-dark)`"
+      :bgColor="activeFilter === 'size' ? `var(--element-primary)` : `var(--element-tertiary-dark)`"
       :borderRadius="`0px 8px 8px 0px`"
       :width="`50%`"
       :textTransform="`none`"
-      @click.stop="store.commit('SIZE_FILTER')"
+      @click.stop="setFilter('size')"
     />
   </div>
 </template>

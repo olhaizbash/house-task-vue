@@ -51,7 +51,7 @@ const buttonImgSrc = computed(() =>
         <div class="house-overlay">
           <div class="houses-control-wrapper">
             <div class="home">
-              <h1>Houses</h1>
+              <h1 class="title">Houses</h1>
               <ButtonComponent
                 class="create-btn"
                 :bgColor="buttonColor"
@@ -109,7 +109,7 @@ const buttonImgSrc = computed(() =>
   }
 }
 
-h1 {
+.title {
   color: var(--text-primary);
   font-size: 18px;
   font-family: 'Montserrat', sans-serif;

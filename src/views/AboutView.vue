@@ -1,25 +1,10 @@
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-const isDesktop = ref(window.innerWidth >= 768)
-
-const updateView = () => {
-  isDesktop.value = window.innerWidth >= 768
-}
-
-onMounted(() => {
-  window.addEventListener('resize', updateView)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateView)
-})
-</script>
+<script setup></script>
 
 <template>
   <main>
     <section class="about">
       <div class="container">
-        <h1 v-if="!isDesktop" class="about-title">About</h1>
+        <h1 class="about-title">About</h1>
         <div class="wrapper">
           <h2 class="subtitle">About DDT Real Estate</h2>
           <p class="about-text">
@@ -76,6 +61,10 @@ onUnmounted(() => {
 
   @media screen and (min-width: 768px) {
     font-size: 32px;
+  }
+
+  @media screen and (min-width: 768px) {
+    display: none;
   }
 }
 

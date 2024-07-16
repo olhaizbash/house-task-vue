@@ -11,6 +11,7 @@ const instance = axios.create({
 
 export const getHouses = async () => {
   const response = await instance.get('')
+  console.log(response.data)
   return response.data
 }
 

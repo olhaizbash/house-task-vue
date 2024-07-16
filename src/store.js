@@ -15,7 +15,8 @@ const store = createStore({
     houseId: null,
     isLoading: false,
     searchQuery: '',
-    filteredHouses: []
+    filteredHouses: [],
+    activeFilter: null
   },
   mutations: {
     SET_HOUSES(state, houses) {
@@ -29,10 +30,6 @@ const store = createStore({
       state.houses.push(house)
       state.filteredHouses.push(house)
       state.houseId = house.id
-    },
-    REMOVE_HOUSE(state, houseId) {
-      state.houses = state.houses.filter((h) => h.id !== houseId)
-      state.filteredHouses = state.houses.filter((h) => h.id !== houseId)
     },
     UPDATE_HOUSE(state, updatedHouse) {
       const index = state.houses.findIndex((h) => h.id === updatedHouse.id)
@@ -55,9 +52,14 @@ const store = createStore({
     },
     PRICE_FILTER(state) {
       state.filteredHouses = state.houses.sort((house1, house2) => house1.price - house2.price)
+      state.activeFilter = 'price'
     },
     SIZE_FILTER(state) {
       state.filteredHouses = state.houses.sort((house1, house2) => house1.size - house2.size)
+      state.activeFilter = 'size'
+    },
+    SET_ACTIVE_FILTER(state, filter) {
+      state.activeFilter = filter
     }
   },
   actions: {
@@ -109,7 +111,6 @@ const store = createStore({
       commit('SET_LOADING', true)
       try {
         await deleteHouse(houseId)
-        commit('REMOVE_HOUSE', houseId)
       } catch (error) {
         console.error('Error deleting house:', error)
       } finally {
