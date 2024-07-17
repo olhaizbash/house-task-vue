@@ -1,210 +1,44 @@
-<script setup></script>
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const visible = computed(() => store.state.isLoading)
+</script>
 <template>
-  <div></div>
+  <div v-if="visible" class="loader-overlay">
+    <div class="loader"></div>
+  </div>
 </template>
 <style scoped>
 @import './../assets/styles/main.css';
 
-div {
-  color: var(--element-primary);
-  font-size: 8px;
-  margin: 5px auto;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  transform: translate(50%, 50%);
-  text-indent: -9999em;
-  -webkit-animation: load4 1.3s infinite linear;
-  animation: load4 1.3s infinite linear;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
   z-index: 9999;
-
-  @-webkit-keyframes load4 {
-    0%,
-    100% {
-      box-shadow:
-        0 -3em 0 0.2em,
-        2em -2em 0 0em,
-        3em 0 0 -1em,
-        2em 2em 0 -1em,
-        0 3em 0 -1em,
-        -2em 2em 0 -1em,
-        -3em 0 0 -1em,
-        -2em -2em 0 0;
-    }
-    12.5% {
-      box-shadow:
-        0 -3em 0 0,
-        2em -2em 0 0.2em,
-        3em 0 0 0,
-        2em 2em 0 -1em,
-        0 3em 0 -1em,
-        -2em 2em 0 -1em,
-        -3em 0 0 -1em,
-        -2em -2em 0 -1em;
-    }
-    25% {
-      box-shadow:
-        0 -3em 0 -0.5em,
-        2em -2em 0 0,
-        3em 0 0 0.2em,
-        2em 2em 0 0,
-        0 3em 0 -1em,
-        -2em 2em 0 -1em,
-        -3em 0 0 -1em,
-        -2em -2em 0 -1em;
-    }
-    37.5% {
-      box-shadow:
-        0 -3em 0 -1em,
-        2em -2em 0 -1em,
-        3em 0em 0 0,
-        2em 2em 0 0.2em,
-        0 3em 0 0em,
-        -2em 2em 0 -1em,
-        -3em 0em 0 -1em,
-        -2em -2em 0 -1em;
-    }
-    50% {
-      box-shadow:
-        0 -3em 0 -1em,
-        2em -2em 0 -1em,
-        3em 0 0 -1em,
-        2em 2em 0 0em,
-        0 3em 0 0.2em,
-        -2em 2em 0 0,
-        -3em 0em 0 -1em,
-        -2em -2em 0 -1em;
-    }
-    62.5% {
-      box-shadow:
-        0 -3em 0 -1em,
-        2em -2em 0 -1em,
-        3em 0 0 -1em,
-        2em 2em 0 -1em,
-        0 3em 0 0,
-        -2em 2em 0 0.2em,
-        -3em 0 0 0,
-        -2em -2em 0 -1em;
-    }
-    75% {
-      box-shadow:
-        0em -3em 0 -1em,
-        2em -2em 0 -1em,
-        3em 0em 0 -1em,
-        2em 2em 0 -1em,
-        0 3em 0 -1em,
-        -2em 2em 0 0,
-        -3em 0em 0 0.2em,
-        -2em -2em 0 0;
-    }
-    87.5% {
-      box-shadow:
-        0em -3em 0 0,
-        2em -2em 0 -1em,
-        3em 0 0 -1em,
-        2em 2em 0 -1em,
-        0 3em 0 -1em,
-        -2em 2em 0 0,
-        -3em 0em 0 0,
-        -2em -2em 0 0.2em;
-    }
+}
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid var(--element-primary);
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  @keyframes load4 {
-    0%,
-    100% {
-      box-shadow:
-        0 -3em 0 0.2em,
-        2em -2em 0 0em,
-        3em 0 0 -1em,
-        2em 2em 0 -1em,
-        0 3em 0 -1em,
-        -2em 2em 0 -1em,
-        -3em 0 0 -1em,
-        -2em -2em 0 0;
-    }
-    12.5% {
-      box-shadow:
-        0 -3em 0 0,
-        2em -2em 0 0.2em,
-        3em 0 0 0,
-        2em 2em 0 -1em,
-        0 3em 0 -1em,
-        -2em 2em 0 -1em,
-        -3em 0 0 -1em,
-        -2em -2em 0 -1em;
-    }
-    25% {
-      box-shadow:
-        0 -3em 0 -0.5em,
-        2em -2em 0 0,
-        3em 0 0 0.2em,
-        2em 2em 0 0,
-        0 3em 0 -1em,
-        -2em 2em 0 -1em,
-        -3em 0 0 -1em,
-        -2em -2em 0 -1em;
-    }
-    37.5% {
-      box-shadow:
-        0 -3em 0 -1em,
-        2em -2em 0 -1em,
-        3em 0em 0 0,
-        2em 2em 0 0.2em,
-        0 3em 0 0em,
-        -2em 2em 0 -1em,
-        -3em 0em 0 -1em,
-        -2em -2em 0 -1em;
-    }
-    50% {
-      box-shadow:
-        0 -3em 0 -1em,
-        2em -2em 0 -1em,
-        3em 0 0 -1em,
-        2em 2em 0 0em,
-        0 3em 0 0.2em,
-        -2em 2em 0 0,
-        -3em 0em 0 -1em,
-        -2em -2em 0 -1em;
-    }
-    62.5% {
-      box-shadow:
-        0 -3em 0 -1em,
-        2em -2em 0 -1em,
-        3em 0 0 -1em,
-        2em 2em 0 -1em,
-        0 3em 0 0,
-        -2em 2em 0 0.2em,
-        -3em 0 0 0,
-        -2em -2em 0 -1em;
-    }
-    75% {
-      box-shadow:
-        0em -3em 0 -1em,
-        2em -2em 0 -1em,
-        3em 0em 0 -1em,
-        2em 2em 0 -1em,
-        0 3em 0 -1em,
-        -2em 2em 0 0,
-        -3em 0em 0 0.2em,
-        -2em -2em 0 0;
-    }
-    87.5% {
-      box-shadow:
-        0em -3em 0 0,
-        2em -2em 0 -1em,
-        3em 0 0 -1em,
-        2em 2em 0 -1em,
-        0 3em 0 -1em,
-        -2em 2em 0 0,
-        -3em 0em 0 0,
-        -2em -2em 0 0.2em;
-    }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>

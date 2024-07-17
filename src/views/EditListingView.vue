@@ -59,7 +59,7 @@ const buttonText = computed(() => isDesktop.value && 'Back to overview')
           :textTransform="`none`"
           @click="goToMain"
         />
-        <h1 class="create-title">{{ isEdit ? `Edit listing` : `Creane new listing` }}</h1>
+        <h1 class="create-title">{{ isEdit ? `Edit listing` : `Create new listing` }}</h1>
       </div>
 
       <LoaderComponent v-if="isLoading" />

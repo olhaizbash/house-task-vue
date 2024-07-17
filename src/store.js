@@ -64,68 +64,50 @@ const store = createStore({
   },
   actions: {
     async fetchHouses({ commit }) {
-      commit('SET_LOADING', true)
       try {
         const houses = await getHouses()
         commit('SET_HOUSES', houses)
       } catch (error) {
         console.error('Error fetching houses:', error)
-      } finally {
-        commit('SET_LOADING', false)
       }
     },
     async fetchHouseById({ commit }, id) {
-      commit('SET_LOADING', true)
       try {
         const house = await getHouseById(id)
         commit('SET_HOUSE', house)
       } catch (error) {
         console.error('Error fetching house:', error)
-      } finally {
-        commit('SET_LOADING', false)
       }
     },
     async createHouse({ commit }, houseData) {
-      commit('SET_LOADING', true)
       try {
         const newHouse = await createHouse(houseData)
         commit('ADD_HOUSE', newHouse)
       } catch (error) {
         console.error('Error creating house:', error)
-      } finally {
-        commit('SET_LOADING', false)
       }
     },
-    async uploadImageHouse({ dispatch, commit }, { houseId, imageData }) {
-      commit('SET_LOADING', true)
+    async uploadImageHouse({ dispatch }, { houseId, imageData }) {
       try {
         await uploadImageHouse(houseId, imageData)
         dispatch('fetchHouseById', houseId)
       } catch (error) {
         console.error('Error uploading house image:', error)
-      } finally {
-        commit('SET_LOADING', false)
       }
     },
     async deleteHouse({ commit }, houseId) {
-      commit('SET_LOADING', true)
       try {
         await deleteHouse(houseId)
       } catch (error) {
         console.error('Error deleting house:', error)
-      } finally {
-        commit('SET_LOADING', false)
       }
     },
     async editHouse({ commit }, { houseId, houseData }) {
-      commit('SET_LOADING', true)
       try {
         const updatedHouse = await editHouse(houseId, houseData)
         commit('UPDATE_HOUSE', updatedHouse)
       } catch (error) {
         console.error('Error editing house:', error)
-      } finally {
-        commit('SET_LOADING', false)
       }
     }
   },

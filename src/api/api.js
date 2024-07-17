@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store'
 
 const API_KEY = '97nCzvJAVHxSgTbkqG184s0oB2wpKPy-'
 
@@ -8,6 +9,28 @@ const instance = axios.create({
     'X-Api-Key': API_KEY
   }
 })
+
+instance.interceptors.request.use(
+  (config) => {
+    store.commit('SET_LOADING', true)
+    return config
+  },
+  (error) => {
+    store.commit('SET_LOADING', false)
+    return Promise.reject(error)
+  }
+)
+
+instance.interceptors.response.use(
+  (response) => {
+    store.commit('SET_LOADING', false)
+    return response
+  },
+  (error) => {
+    store.commit('SET_LOADING', false)
+    return Promise.reject(error)
+  }
+)
 
 export const getHouses = async () => {
   const response = await instance.get('')
