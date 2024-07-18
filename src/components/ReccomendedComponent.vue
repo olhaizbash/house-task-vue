@@ -1,11 +1,24 @@
 <script setup>
 import HouseItemComponent from './HouseItemComponent.vue'
 import { useStore } from 'vuex'
-import { computed, ref } from 'vue'
+import { computed} from 'vue'
 
 const store = useStore()
 const houses = computed(() => store.getters.getHouses)
-const visibleHouses = ref(houses.value.slice(0, 3))
+const houseCurrent =  computed(() => store.getters.getHouse)
+
+function filterAndSortHouses(houses, referenceHouse) {
+  const referencePrice = referenceHouse[0].price;
+  const filteredAndSortedHouses = houses
+    .filter(house => house.price <= referencePrice)
+    .filter(house => house.id !== referenceHouse[0].id)
+    .sort((a, b) => b.price - a.price)
+    .slice(0, 3);
+  return filteredAndSortedHouses;
+}
+
+const visibleHouses = computed(() => filterAndSortHouses(houses.value, houseCurrent.value))
+
 </script>
 <template>
   <div class="wrapper-recomended">
